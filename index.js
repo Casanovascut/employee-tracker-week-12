@@ -1,10 +1,12 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+// SQL connection
 const { connection } = require('./connection')
 
 // create inquirer questions 
 
 // 1. multiple choice, view all departments/view all roles/view all employees/add a department/add a role/add an employee/update an employee role
+
 
 // view all departments = choice presents table showing department names and id's
 
