@@ -85,6 +85,7 @@ const addRole = () => {
                             if (error) {
                                 reject(error);
                             } else {
+                                // console logs name of the new role added to database
                                 console.log('The new role has been added to the database.');
                                 resolve();
                             }
@@ -101,25 +102,143 @@ const addRole = () => {
 
 
 
-// console logs name of the new role added to database
+
 
 // adds new department
-const addDepartment = () => {}
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of the new department?'
+        }
+    ]).then(answers => {
+      // Insert the new department into the database
+        connection.query(
+        `INSERT INTO department (name) VALUES (?)`,
+        [answers.name],
+        (error, results) => {
+            if (error) {
+            throw error;
+            } else {
+            console.log('The new department has been added to the database.');
+            }
+        }
+        );
+    });
+};
     // asks the name of the department
     // adds department to database
     // console logs name of the new department added to database
 
-// adds new employee
-const addEmployee  = () => {}
-    // asks employee first name
-    // asks employee last name
-    // asks employee role
-    // asks employee manager
-    // adds employee too database
-    // console logs first name last name of emplyee added too database
+const getEmployees = () => {
+        return new Promise((resolve, reject) => {
+            connection.query(`SELECT id, first_name, last_name FROM employee`, (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+            });
+        });
+    };
 
-// updates employee
-const updateRole = () =>{}
+const getRoles = () => {
+        return new Promise((resolve, reject) => {
+            connection.query(`SELECT id, title FROM role`, (error, results) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(results);
+            }
+        });
+    });
+};
+
+// adds new employee
+const addEmployee = () => {
+    getRoles().then(roles => {
+        inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: 'What is the employee first name?'
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: 'What is the employee last name?'
+        },
+        {
+            type: 'list',
+            name: 'role',
+            message: 'What is the employee role?',
+            choices: roles.map(role => {
+            return {
+                name: role.title,
+                value: role.id
+            };
+        })
+        }
+    ]).then(answers => {
+        // Insert the new employee into the database
+        connection.query(
+            `INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)`,
+            [answers.firstName, answers.lastName, answers.role],
+        (error, results) => {
+            if (error) {
+                throw error;
+            } else {
+                console.log('The new employee has been added to the database.');
+            }
+            } 
+            );
+        });
+    });
+};
+
+const updateRole = () =>{
+    getEmployees().then(employees => {
+        getRoles().then(roles => {
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'employee',
+                    message: 'Which employee do you want to update?',
+                    choices: employees.map(employee => {
+                    return {
+                            name: `${employee.first_name} ${employee.last_name}`,
+                            value: employee.id
+                        };
+                    })
+                },
+                {
+                    type: 'list',
+                    name: 'roleChange',
+                    message: 'what role is this employee changing too?',
+                    choices: roles.map(role => {
+                        return {
+                            name: role.title,
+                            value: role.id
+                        };
+                    })
+                }
+            ]).then( answers => {
+                connection.query(
+                    `UPDATE employee SET role_id = ? WHERE id = ?`,
+                    [answers.role, answers.employee],
+                    (error, results) => {
+                        if (error) {
+                        throw error;
+                        } else {
+                        console.log('The employee role has been updated in the database.');
+                        }
+                    }
+                )
+            })
+        })
+    })
+}
     // asks which employee to update
     // asks which role you want to assign
     // updates employee in database
