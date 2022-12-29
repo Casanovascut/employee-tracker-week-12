@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 // SQL connection
 const { connection } = require('./connection')
 // SQL retrieving values
-const { viewAllEmployees,viewAllRoles,viewAllDepartments } = require('./db/query')
+const {viewAllEmployees,viewAllRoles,viewAllDepartments,addRole,addDepartment,addEmployee,updateRole} = require('./db/query')
 
 
 // create inquirer questions 

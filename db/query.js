@@ -46,21 +46,71 @@ const viewAllDepartments = () => {
 };
 
 // adds new role
-addRole()
-    //asks name of role
-    // asks salary of role
-    // asks which department the role belongs to
-    // adds role to database
-    // console logs name of the new role added to database
+const addRole = () => {
+    return new Promise((resolve,reject)=>{
+        connection.query(`SELECT id, name FROM department`,(error,results)=>{
+            if (error) {
+                reject(error);
+            } else {
+                inquirer.prompt([
+                    {
+                        //asks name of role
+                        type:  'input',
+                        name: 'title',
+                        message: 'What is the name of the new role?'
+                    },
+                    {
+                        // asks salary of role
+                        type: 'input',
+                        name: 'salary',
+                        message: 'What is the salary for the new role?'
+                    },
+                    {
+                        // asks which department the role belongs to
+                        type: 'list',
+                        name: 'department',
+                        message: 'What department does the new role belong to?',
+                        choices: results.map(department =>{
+                            // returns all of the departments
+                            return {
+                                name: department.name,
+                                value: department.id
+                            };
+                        })
+                    }
+                ]).then(answers => {
+                    // adds role to database
+                    connection.query(
+                        `INSERT INTO role (title,salary,department_id) VALUES (?,?,?)`,[answers.title,answers.salary,answers.department], (error,results) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                console.log('The new role has been added to the database.');
+                                resolve();
+                            }
+                        }
+                    )
+                }
+
+                )
+            }
+        })
+    })
+}
+
+
+
+
+// console logs name of the new role added to database
 
 // adds new department
-addDepartment()
+const addDepartment = () => {}
     // asks the name of the department
     // adds department to database
     // console logs name of the new department added to database
 
 // adds new employee
-addEmployee()
+const addEmployee  = () => {}
     // asks employee first name
     // asks employee last name
     // asks employee role
@@ -69,7 +119,7 @@ addEmployee()
     // console logs first name last name of emplyee added too database
 
 // updates employee
-updateRole()
+const updateRole = () =>{}
     // asks which employee to update
     // asks which role you want to assign
     // updates employee in database
