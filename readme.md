@@ -31,7 +31,6 @@ run npm install in the CLI. when done tpe node index.js in the cli. scroll throu
 
 allows the user to view total roles, employees, departments, and employee salaries as well as make updates to these values
 
-https://user-images.githubusercontent.com/112491490/211169629-a11571aa-63e5-4d40-98e8-dbc09dff1145.mp4
 
 ## contributing
 none
