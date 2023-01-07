@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+
 // SQL connection
 const { connection } = require('../connection')
 
@@ -105,7 +106,7 @@ const addRole = () => {
 
 
 // adds new department
-const addDepartment = () => {
+const addDepartment = (callback) => {
     inquirer.prompt([
         {
         type: 'input',
@@ -122,6 +123,7 @@ const addDepartment = () => {
             throw error;
             } else {
             console.log('The new department has been added to the database.');
+            callback();
             }
         }
         );
@@ -156,7 +158,7 @@ const getRoles = () => {
 };
 
 // adds new employee
-const addEmployee = () => {
+const addEmployee = (callback) => {
     getRoles().then(roles => {
         inquirer.prompt([
         {
@@ -190,6 +192,7 @@ const addEmployee = () => {
                 throw error;
             } else {
                 console.log('The new employee has been added to the database.');
+                callback()
             }
             } 
             );
@@ -197,7 +200,7 @@ const addEmployee = () => {
     });
 };
 
-const updateRole = () =>{
+const updateRole = (callback) =>{
     getEmployees().then(employees => {
         getRoles().then(roles => {
             inquirer.prompt([
@@ -232,6 +235,7 @@ const updateRole = () =>{
                         throw error;
                         } else {
                         console.log('The employee role has been updated in the database.');
+                        callback()
                         }
                     }
                 )

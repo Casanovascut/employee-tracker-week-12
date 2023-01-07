@@ -39,11 +39,11 @@ inquirer.prompt([
                 break;
 // add an employee = prompt to enter the employee firstName, lastName, manager, and is then added to database
         case 'Add Employee':
-            addEmployee()
+            addEmployee(promptMain)
                 break;
 // update an employee role = prompt to select an employee to update ande their role, database is updated accordingly
         case 'Update Employee Role':
-            updateRole();
+            updateRole(promptMain);
                 break;
 // add a role = prompt to enter name,salary, and department for the role which is then added to database
         case 'Add Role':
@@ -53,7 +53,7 @@ inquirer.prompt([
                 break;
 // add a department = prompt to enter the name of the department which is then added to database
         case 'Add Department':
-            addDepartment()
+            addDepartment(promptMain)
                 break;
                 // End the connection to the database
         case 'End':
